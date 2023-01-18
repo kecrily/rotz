@@ -186,6 +186,7 @@ fn run() -> Result<(), miette::Report> {
     cli::Command::Sync { sync } => commands::Sync::new(config).execute((cli.bake(), sync.bake())),
     cli::Command::Init { repo } => commands::Init::new(config).execute((cli, repo)),
   }
+    cli::Command::Init { init } => commands::Init::new(config).execute((cli, init)),
 }
 
 fn read_config(cli: &Cli) -> Result<Config, Error> {
