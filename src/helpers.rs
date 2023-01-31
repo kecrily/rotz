@@ -115,10 +115,10 @@ pub enum GlobError {
 }
 
 #[cfg_attr(feature = "profiling", instrument)]
-pub fn glob_from_vec(from: &[String], postfix: &str) -> miette::Result<Any<'static>> {
+pub fn glob_from_vec(from: &[String], postfix: Option<&str>) -> miette::Result<Any<'static>> {
   from
     .iter()
-    .map(|g| format!("{g}{postfix}"))
+    .map(|g| postfix.map_or_else(|| g.to_string(), |postfix| format!("{g}{postfix}")))
     .map(|g| Glob::new(&g).map(Glob::into_owned).map_err(|e| GlobError::Build(BuildError::into_owned(e))))
     .collect_vec()
     .pipe(join_err_result)?
